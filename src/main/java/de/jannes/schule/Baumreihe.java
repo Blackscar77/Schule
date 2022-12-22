@@ -21,15 +21,19 @@ public class Baumreihe {
     public Baumreihe() {
         view = new View(1200, 600, "Baumreihe");
 
-        int i = 0;
+        //int i = 0;
 
-        while (i < 11) {
+        //while (i < 11)
+
+        for (int i = 0; i < 11; i++) {
 
             rectangle = new Rectangle(90 * scale + i * 100 * scale, 100, 20 * scale, 100 * scale, Color.decode("#5b3a29"));
 
             circle = new Circle(50 * scale + i * 100 * scale, 50, 50 * scale, Color.GREEN);
 
-            i++;
+            //i++;
         }
+
+
     }
 }
