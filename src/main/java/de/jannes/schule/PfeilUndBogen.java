@@ -10,7 +10,7 @@ public class PfeilUndBogen {
 
     View view;
 
-    Text text;
+    Text text, score;
 
     Rectangle pfeil;
 
@@ -19,6 +19,8 @@ public class PfeilUndBogen {
     Rectangle mitte, fast, fast2, schade, schade2;
 
     boolean enterPressed;
+
+    int punkte;
 
     public static void main(String[] args) {
         new PfeilUndBogen();
@@ -30,9 +32,11 @@ public class PfeilUndBogen {
 
         text = new Text(400, 50, "Drücke Enter um den Pfeil zu schießen");
 
-        pfeil = new Rectangle(100, 250, 100, 15);
+        score = new Text(text.getShapeX(), text.getShapeY() + 25, "Deine Punkte: " + punkte);
 
-        spitze = new Rectangle(pfeil.getShapeX() + 90, pfeil.getShapeY(), 15, 15);
+        pfeil = new Rectangle(100, 250, 100, 10);
+
+        spitze = new Rectangle(pfeil.getShapeX() + 95, pfeil.getShapeY(), 10, 10);
 
         spitze.turn(45);
 
@@ -47,16 +51,19 @@ public class PfeilUndBogen {
 
         schade2 = new Rectangle(mitte.getShapeX(), mitte.getShapeY() + 125, 25, 100, Color.RED);
 
-        boolean hoch;
-        hoch = false;
+        boolean hoch = false;
 
-        boolean runter;
-        runter = true;
+        boolean runter = true;
 
         while (true) {
             if (view.keyEnterPressed()) enterPressed = true;
 
             if (view.keyBackspacePressed()) reset();
+
+            if (view.keyPressed('p')) {
+                punkte = 0;
+                score.setText("Deine Punkte: " + punkte);
+            }
 
             double y = pfeil.getCenterY();
 
@@ -100,12 +107,29 @@ public class PfeilUndBogen {
                 view.wait(3);
             }
 
-            if (pfeil.intersects(mitte)) text.setText("Du hast die Goldene Mitte getroffen");
+            if (pfeil.intersects(mitte)) {
+                punkte = punkte + 3;
+                score.setText("Deine Punkte: " + punkte);
+                text.setText("Du hast die Goldene Mitte getroffen");
+                view.wait(1000);
+                reset();
+            }
 
-            if (pfeil.intersects(fast) || pfeil.intersects(fast2)) text.setText("Du hast fast die Mitte getroffen");
+            if (pfeil.intersects(fast) || pfeil.intersects(fast2)) {
+                punkte = punkte + 2;
+                score.setText("Deine Punkte: " + punkte);
+                text.setText("Knapp daneben ist auch vorbei");
+                view.wait(1000);
+                reset();
+            }
 
-            if (pfeil.intersects(schade) || pfeil.intersects(schade2))
+            if (pfeil.intersects(schade) || pfeil.intersects(schade2)) {
+                punkte = punkte + 1;
+                score.setText("Deine Punkte: " + punkte);
                 text.setText("Schade vielleicht beim nächsten mal");
+                view.wait(1000);
+                reset();
+            }
         }
     }
 
@@ -117,7 +141,7 @@ public class PfeilUndBogen {
         pfeil.moveTo(100, 250);
 
         spitze.turnTo(0);
-        spitze.moveTo(pfeil.getShapeX() + 90, pfeil.getShapeY());
+        spitze.moveTo(pfeil.getShapeX() + 95, pfeil.getShapeY());
         spitze.turnTo(45);
     }
 }
