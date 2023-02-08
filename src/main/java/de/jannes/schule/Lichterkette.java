@@ -22,6 +22,7 @@ public class Lichterkette {
     Lichterkette() {
 
         //Eingabe vom User erhalten
+        System.out.println("Wie viele Kreise/Lichter möchtest du erzeugen?");
         Scanner scanner = new Scanner(System.in);
 
         try {
