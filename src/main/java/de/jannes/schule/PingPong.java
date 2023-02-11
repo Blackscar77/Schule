@@ -1,11 +1,10 @@
 package de.jannes.schule;
 
-import sas.Circle;
 import sas.Rectangle;
-import sas.Text;
-import sas.View;
+import sas.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class PingPong {
 
@@ -15,14 +14,17 @@ public class PingPong {
 
     View view;
 
-    Text anleitungSpielerLinks, anleitungSpielerRechts, ergebnis, punkte;
-
     Circle ball;
 
     Rectangle oben, unten, links, rechts, spielerLinks, spielerRechts;
 
+    Text anleitungSpielerLinks, anleitungSpielerRechts, punkte, ergebnis;
+
     int x = 1;
     int y = 1;
+
+    ArrayList<Integer> arrayListX = new ArrayList<Integer>();
+    ArrayList<Integer> arrayListY = new ArrayList<Integer>();
 
     int punkteSpielerLinks;
     int punkteSpielerRechts;
@@ -52,6 +54,18 @@ public class PingPong {
 
         punkte = new Text(oben.getShapeX() + 300, oben.getShapeY() - 40, "Punkte: Links: " + punkteSpielerLinks + " - Rechts: " + punkteSpielerRechts);
 
+        arrayListX.add(1);
+        arrayListX.add(-1);
+
+        arrayListY.add(1);
+        arrayListY.add(-1);
+
+        int randomX = arrayListX.get(Tools.randomNumber(0, 1));
+        int randomY = arrayListY.get(Tools.randomNumber(0, 1));
+
+        x = randomX;
+        y = randomY;
+
 
         starteSpiel();
     }
@@ -67,6 +81,14 @@ public class PingPong {
                 spielerRechts.move(0, 1);
             }
 
+            if (view.keyLeftPressed() && !spielerRechts.intersects(links)) {
+                spielerRechts.move(-1, 0);
+            }
+
+            if (view.keyRightPressed() && !spielerRechts.intersects(rechts)) {
+                spielerRechts.move(1, 0);
+            }
+
 
             //Spieler Links
             if (view.keyPressed('w') && !spielerLinks.intersects(oben)) {
@@ -77,14 +99,24 @@ public class PingPong {
                 spielerLinks.move(0, 1);
             }
 
+            if (view.keyPressed('a') && !spielerLinks.intersects(links)) {
+                spielerLinks.move(-1, 0);
+            }
+
+            if (view.keyPressed('d') && !spielerLinks.intersects(rechts)) {
+                spielerLinks.move(1, 0);
+            }
+
+
             //Reset
             if (view.keyBackspacePressed()) {
                 punkteSpielerLinks = 0;
                 punkteSpielerRechts = 0;
                 ergebnis.setText("Wer wird wohl gewinnen?");
-                punkte.setText("Punkte: Links: " + punkteSpielerLinks + " - Rechts: " + punkteSpielerRechts);
-                ball.moveTo(oben.getShapeX() + 490, oben.getShapeY() + 240);
+                punkte.setText(punkteString());
+                resetLocation();
             }
+
 
             //Ball   
             if (ball.intersects(oben)) {
@@ -99,20 +131,18 @@ public class PingPong {
                 x = 1;
                 punkteSpielerRechts++;
                 ergebnis.setText("Der Rechte Spieler hat gewonnen!");
-                punkte.setText("Punkte: Links: " + punkteSpielerLinks + " - Rechts: " + punkteSpielerRechts);
+                punkte.setText(punkteString());
                 view.wait(1000);
-                ball.moveTo(oben.getShapeX() + 490, oben.getShapeY() + 240);
-                starteSpiel();
+                resetLocation();
             }
 
             if (ball.intersects(rechts)) {
                 x = -1;
                 punkteSpielerLinks++;
                 ergebnis.setText("Der Linke Spieler hat gewonnen!");
-                punkte.setText("Punkte: Links: " + punkteSpielerLinks + " - Rechts: " + punkteSpielerRechts);
+                punkte.setText(punkteString());
                 view.wait(1000);
-                ball.moveTo(oben.getShapeX() + 490, oben.getShapeY() + 240);
-                starteSpiel();
+                resetLocation();
             }
 
             if (ball.intersects(spielerLinks)) {
@@ -127,5 +157,15 @@ public class PingPong {
             ball.move(x, y);
             view.wait(1);
         }
+    }
+
+    private String punkteString() {
+        return "Punkte: Links: " + punkteSpielerLinks + " - Rechts: " + punkteSpielerRechts;
+    }
+
+    private void resetLocation() {
+        ball.moveTo(oben.getShapeX() + 490, oben.getShapeY() + 240);
+        spielerLinks.moveTo(links.getCenterX() + 20, links.getCenterY() - 50);
+        spielerRechts.moveTo(rechts.getCenterX() - 30, rechts.getCenterY() - 50);
     }
 }
