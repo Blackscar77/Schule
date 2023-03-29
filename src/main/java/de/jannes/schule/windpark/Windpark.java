@@ -4,32 +4,39 @@ import sas.View;
 
 public class Windpark {
 
-    Windrad[] windrad;
-
     public static void main(String[] args) {
-        new Windpark(10);
+        new Windpark();
     }
 
     View view;
 
-    int anzahl;
+    Windrad[] windrad;
 
-    public Windpark(int geschwindigkeit) {
+    Wind derWind;
+
+    public Windpark() {
         view = new View(1200, 600, "Windpark");
 
-        anzahl = 3;
+        derWind = new Wind(3);
 
-        windrad = new Windrad[anzahl];
+        windrad = new Windrad[3];
 
-        for (int i = 0; i < anzahl; i++) {
-            windrad[i] = new Windrad(300 * i + 250, 300);
+        for (int i = 0; i < windrad.length; i++) {
+            windrad[i] = new Windrad(300 * i + 250, 300, derWind);
         }
 
         while (true) {
-            for (int i = 0; i < anzahl; i++) {
+            if (view.keyUpPressed()) derWind.windstaerke++;
+            if (view.keyDownPressed()) derWind.windstaerke--;
+
+            if (derWind.windstaerke <= -5) derWind.windstaerke = -5;
+            if (derWind.windstaerke >= 5) derWind.windstaerke = 5;
+
+            for (int i = 0; i < windrad.length; i++) {
                 windrad[i].drehe();
             }
-            view.wait(geschwindigkeit);
+
+            view.wait(10);
         }
     }
 }

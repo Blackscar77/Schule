@@ -11,11 +11,15 @@ public class Windrad {
     Rectangle mast;
     Rectangle[] rotor;
 
-    public Windrad(double x, double y) {
+    Wind windobjekt;
+
+    public Windrad(double x, double y, Wind pWind) {
 
         mast = new Rectangle(x, y, 50, 250, Color.GRAY);
 
         circle = new Circle(mast.getShapeX(), mast.getShapeY() - 40, 25, Color.BLUE);
+
+        windobjekt = pWind;
 
         rotor = new Rectangle[3];
 
@@ -27,7 +31,7 @@ public class Windrad {
 
     public void drehe() {
         for (int i = 0; i < rotor.length; i++) {
-            rotor[i].turn(circle.getCenterX(), circle.getCenterY(), 1);
+            rotor[i].turn(circle.getCenterX(), circle.getCenterY(), windobjekt.windstaerke);
         }
     }
 }
