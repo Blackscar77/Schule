@@ -31,7 +31,7 @@ public class Windrad {
 
     public void drehe() {
         for (int i = 0; i < rotor.length; i++) {
-            rotor[i].turn(circle.getCenterX(), circle.getCenterY(), windobjekt.windstaerke);
+            rotor[i].turn(circle.getCenterX(), circle.getCenterY(), windobjekt.getWind());
         }
     }
 }
